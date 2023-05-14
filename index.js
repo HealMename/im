@@ -12,9 +12,9 @@ var voipMsgWindow = null;
 var videoLiveMsgWindow = null;
 var superTalkMsgWindow = null;
 
-// 集成文档请参考 https://docs.starrtc.com/en/docs/web-7.html https://121.36.12.82/
+// 集成文档请参考 https://docs.starrtc.com/en/docs/web-7.html https://liudeli.top/
 
-var aecRequestBaseURL = "https://121.36.12.82/aec";				//开启AEC后，才生效，从此url获取各种列表信息
+var aecRequestBaseURL = "https://liudeli.top/aec";				//开启AEC后，才生效，从此url获取各种列表信息
 var privateURL = "121.36.12.82";								//后端服务地址，可为ip，也可为域名
 var webrtcIP = "121.36.12.82";										//后端服务地址，必须为ip（目前只有chrome72以上支持设置成域名），webrtc ip，用于设置webrtc udp ip，用于setSrcServerInfo，setVdnServerInfo，setVoipServerInfo接口，不设置时与后端服务地址privateURL一致
 
