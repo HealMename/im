@@ -12,8 +12,6 @@ yarn-error.log*
 .idea
 .vscode
 
-dist
-
 # production
 esm
 lib
