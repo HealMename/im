@@ -1,5 +1,5 @@
 <template>
-  <div :class="['login' + (env.isH5 ? '-h5' : '')]" data-env="H5">
+  <div :class="['login' + (env.isH5 ? '-h5' : '')]" data-env="H5" style="display:none;">
     <Header class="login-header">
       <template v-slot:left>
         <div class="logo">
@@ -126,12 +126,16 @@ import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { useI18nLocale } from '../TUIKit/TUIPlugin/TUIi18n';
+import { base_login } from '../api/login';
+import axios from 'axios';
 
 import Header from '../components/Header.vue';
 import { switchTitle } from '../utils/switchTitle';
 import Link from '../assets/link';
 import { genTestUserSig, EXPIRETIME } from '../TUIKit/debug/index';
 import { SDKAppID, secretKey } from '../main';
+import {types} from "sass";
+import String = types.String;
 
 export default defineComponent({
   components: {
@@ -220,40 +224,48 @@ export default defineComponent({
       });
     };
     const _searchs = location.hash.split("?");
-    var map = {
-      user_id: ''
-    };
-    console.log(111, location.hash)
+    var token;
     _searchs.forEach(_s => {
-        console.log(2, _s)
         const _array = _s.split('&');
         _array.forEach(str => {
             const _str = str.split('=');
-            // map[_str[0]] = _str[1];
-           console.log(3, _str[0])
-          map.user_id = _str[1]
+          token = _str[1]
         });
     });
-    const options = genTestUserSig({ SDKAppID, secretKey, userID: map.user_id });
-    const userInfo = {
-      userID: map.user_id,
-      userSig: options.userSig,
-    };
-    TUIKit.login(userInfo).then((res: any) => {
-          const options = {
-            ...userInfo,
-            expire: new Date().getTime() + EXPIRETIME * 1000,
-          };
-          store.commit('setUserInfo', options);
-          router.push({ name: 'Home' });
+    var username;
+    axios.get("http://127.0.0.1:8087/user/info/?token="+ token).then(res => {
+            username = res.data.data.user.id.toString()
+            var nick = res.data.data.user.username
+            console.log('nick', nick)
+            store.commit('user_info', JSON.stringify(res.data.data.user));
+            const options = genTestUserSig({ SDKAppID, secretKey, userID: nick });
+            const userInfo = {
+              userID: nick,
+              userSig: options.userSig,
+              nick: nick
+            };
+            TUIKit.login(userInfo).then((res: any) => {
+                  const options = {
+                    ...userInfo,
+                    expire: new Date().getTime() + EXPIRETIME * 1000,
+                  };
+                  store.commit('setUserInfo', options);
+                  router.push({ name: 'Home' });
+                })
+                .catch((error: any) => {
+                  ElMessage({
+                    message: error,
+                    grouping: true,
+                    type: 'error',
+                  });
+                });
         })
-        .catch((error: any) => {
-          ElMessage({
-            message: error,
-            grouping: true,
-            type: 'error',
-          });
-        });
+        .catch(err => {
+            console.log(err)
+        })
+
+
+
 
     const exitLogin = async () => {
       localStorage.removeItem('TUIKit-userInfo');
