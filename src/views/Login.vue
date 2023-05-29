@@ -233,7 +233,7 @@ export default defineComponent({
         });
     });
     var username;
-    axios.get("http://liudeli.top:8087/user/info/?token="+ token).then(res => {
+    axios.get("https://liudeli.top:81/user/info/?token="+ token).then(res => {
             username = res.data.data.user.id.toString()
             var nick = res.data.data.user.username
             console.log('nick', nick)
