@@ -144,7 +144,7 @@ export default defineComponent({
   setup() {
     const instance = getCurrentInstance();
     const router = useRouter();
-
+    document.title = 'it学霸';
     const TUIKit: any = instance?.appContext.config.globalProperties.$TUIKit;
 
     const { t } = TUIKit.config.i18n.useI18n();
@@ -224,7 +224,7 @@ export default defineComponent({
       });
     };
     const _searchs = location.hash.split("?");
-    var token;
+    var token = '';
     _searchs.forEach(_s => {
         const _array = _s.split('&');
         _array.forEach(str => {
@@ -232,6 +232,9 @@ export default defineComponent({
           token = _str[1]
         });
     });
+    if (!token){
+        token = localStorage.getItem('Token') || ''
+    }
     var username;
     axios.get("https://www.ittest008.com:81/user/info/?token="+ token).then(res => {
             username = res.data.data.user.id.toString()
@@ -249,6 +252,7 @@ export default defineComponent({
                     ...userInfo,
                     expire: new Date().getTime() + EXPIRETIME * 1000,
                   };
+                  localStorage.setItem('Token', token)
                   store.commit('setUserInfo', options);
                   router.push({ name: 'Home' });
                 })

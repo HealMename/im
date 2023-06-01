@@ -83,8 +83,8 @@
               <TUIChat :isMsgNeedReadReceipt="isMsgNeedReadReceipt" :isNeedTyping="true" :isNeedEmojiReact="true">
                 <div class="chat-default">
                   <h1>
-                    {{ $t('Home.欢迎使用') }} <img class="logo" src="../assets/image/logo.svg" alt="" />
-                    {{ $t('即时通信') }}
+                    {{ $t('Home.欢迎使用') }}
+
                   </h1>
                   <p>
                     {{
@@ -313,6 +313,7 @@ export default defineComponent({
     Drag,
   },
   setup(props, context) {
+    document.title = 'it学霸';
     const instance = getCurrentInstance();
     const locale = useI18nLocale();
     const TUIKit: any = instance?.appContext.config.globalProperties.$TUIKit;
