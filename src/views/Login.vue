@@ -236,7 +236,7 @@ export default defineComponent({
         token = localStorage.getItem('Token') || ''
     }
     var username;
-    axios.get("https://www.ittest008.com:81/user/info/?token="+ token).then(res => {
+    axios.get("https://www.ittest008.com/user/info/?token="+ token).then(res => {
             username = res.data.data.user.id.toString()
             var nick = res.data.data.user.username
             console.log('nick', nick)
